@@ -1,176 +1,222 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Duit Raya</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-green: #0F766E;
-            --secondary-gold: #D4AF37;
-            --background-cream: #FAFAF8;
-            --text-dark: #1A1A1A;
-            --border-light: #F1EFEA;
-        }
-        body {
-            background-color: var(--background-cream);
-            font-family: 'Inter', sans-serif;
-            color: var(--text-dark);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='%23F1EFEA' fill-opacity='0.4'%3E%3Cpath d='M50 0h50v50H50zM0 50h50v50H0z'/%3E%3C/g%3E%3C/svg%3E");
-        }
-        h1, h2, h3 {
-            font-family: 'Poppins', sans-serif;
-        }
-        .card {
-            background-color: #FFFFFF;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05);
-            border: 1px solid var(--border-light);
-        }
-        .form-input {
-            border: 1px solid #E5E7EB;
-            border-radius: 0.75rem;
-            padding: 0.75rem 1rem;
-            text-align: right;
-            font-size: 1.125rem;
-            font-weight: 500;
-        }
-        .form-input:focus {
-            outline: 2px solid var(--primary-green);
-            outline-offset: 2px;
-            border-color: transparent;
-        }
-        .btn-primary {
-            background-color: var(--primary-green);
-            color: white;
-            border-radius: 0.75rem;
-            padding: 1rem;
-            font-weight: 600;
-            transition: background-color 150ms ease-in-out;
-        }
-        .btn-primary:hover {
-            background-color: #0D635B;
-        }
-        .btn-secondary {
-            background-color: var(--border-light);
-            color: var(--text-dark);
-            border-radius: 0.75rem;
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            transition: background-color 150ms ease-in-out;
-        }
-        .btn-secondary:hover {
-            background-color: #E5E2DA;
-        }
-        .soft-glow {
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0) 60%);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator Duit Raya</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --green:#0F766E;
+  --gold:#D4AF37;
+  --cream:#FAFAF8;
+  --border:#F1EFEA;
+}
+body{
+  background:var(--cream);
+  font-family:Inter,sans-serif;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cg fill='%23F1EFEA' fill-opacity='0.35'%3E%3Cpath d='M50 0h50v50H50zM0 50h50v50H0z'/%3E%3C/g%3E%3C/svg%3E");
+}
+h1,h2{font-family:Poppins,sans-serif}
+.card{
+  background:#fff;
+  border-radius:1.5rem;
+  border:2px solid var(--border);
+  box-shadow:0 10px 25px rgba(0,0,0,.05)
+}
+.input{
+  border:1px solid #E5E7EB;
+  border-radius:.75rem;
+  padding:.6rem .8rem;
+  text-align:center;
+  width:4.5rem;
+}
+.input:disabled{background:#F9FAFB}
+.btn-icon{
+  width:2rem;height:2rem;
+  border-radius:9999px;
+  border:1px solid #E5E7EB;
+  font-size:1.1rem;
+}
+.btn-icon:hover{background:#F3F4F6}
+.soft-glow{
+  background:radial-gradient(circle,rgba(212,175,55,.08),transparent 60%)
+}
+.toggle{
+  width:42px;height:24px;border-radius:9999px;
+  background:#E5E7EB;position:relative;cursor:pointer
+}
+.toggle::after{
+  content:"";width:18px;height:18px;background:#fff;
+  border-radius:50%;position:absolute;top:3px;left:3px;
+  transition:.2s
+}
+.toggle.on{background:#16A34A}
+.toggle.on::after{left:21px}
+</style>
 </head>
+
 <body x-data="calculator()">
-    <main class="max-w-xl mx-auto p-4 sm:p-6 lg:p-8">
-        <header class="text-center my-8">
-            <h1 class="text-3xl font-bold tracking-tight">Kalkulator Duit Raya</h1>
-            <p class="text-gray-500 mt-2">Rancang agihan duit raya anda dengan mudah.</p>
-        </header>
+<main class="max-w-xl mx-auto p-4 sm:p-6 lg:p-8">
 
-        <!-- Calculator Input Card -->
-        <div class="card p-6 sm:p-8">
-             <div class="mb-6">
-                <label for="budget" class="block text-sm font-medium text-gray-700 mb-2">Bajet Anda (RM)</label>
-                <input type="number" id="budget" x-model.number="budget" class="form-input w-full" placeholder="0">
-            </div>
-            <div class="border-t border-gray-100 my-6"></div>
-            <h2 class="text-xl font-semibold mb-6">Masukkan Kuantiti</h2>
-            <div class="space-y-4">
-                <template x-for="d in denominations" :key="d.value">
-                    <div class="flex items-center justify-between">
-                        <label class="font-medium text-lg" x-text="`RM ${d.value}`"></label>
-                        <input type="number" min="0" x-model.number="d.count" @input="calculate()" class="form-input w-32" placeholder="0">
-                    </div>
-                </template>
-            </div>
+<header class="text-center my-8">
+  <h1 class="text-3xl font-bold">Kalkulator Duit Raya</h1>
+  <p class="text-gray-500 mt-2">Rancang agihan duit raya anda dengan mudah.</p>
+</header>
+
+<div class="card p-6 sm:p-8"
+     :class="{
+       'border-emerald-500': totalAmount <= budget,
+       'border-red-500': totalAmount > budget
+     }">
+
+  <!-- Bajet + Toggle -->
+  <div class="flex items-center justify-between mb-4">
+    <label class="text-sm font-medium text-gray-700">Bajet Anda (RM)</label>
+    <div class="flex items-center gap-2 text-sm">
+      <span>Auto Pecah</span>
+      <div class="toggle" :class="{on:auto}" @click="toggleAuto()"></div>
+    </div>
+  </div>
+
+  <input type="number" min="0"
+         x-model.number="budget"
+         @input="auto ? autoDistribute() : calculate()"
+         class="input w-full text-right mb-6"
+         placeholder="0">
+
+  <h2 class="text-lg font-semibold mb-4">Masukkan Kuantiti</h2>
+
+  <div class="space-y-4">
+    <template x-for="d in denominations" :key="d.value">
+      <div class="flex items-center justify-between">
+        <span class="font-medium">RM <span x-text="d.value"></span></span>
+        <div class="flex items-center gap-2">
+          <button class="btn-icon" @click="updateCount(d,-1)" :disabled="auto">−</button>
+          <input type="number" min="0" x-model.number="d.count"
+                 @input="calculate" :disabled="auto"
+                 class="input">
+          <button class="btn-icon" @click="updateCount(d,1)" :disabled="auto">+</button>
         </div>
+      </div>
+    </template>
+  </div>
 
-        <!-- Result Summary Card -->
-        <div x-show="totalAmount > 0 || budget > 0" :class="{
-            'border-green-500': totalAmount > 0 && totalAmount === budget,
-            'border-red-500': totalAmount > budget,
-            'border-transparent': totalAmount < budget
-        }" class="card p-6 sm:p-8 mt-8 border-4" x-transition.opacity.duration.500ms>
-            <h2 class="text-xl font-semibold mb-6">Ringkasan Duit Raya</h2>
-            <div class="relative flex flex-col items-center justify-center soft-glow py-8">
-                 <div class="absolute inset-0 border-4 border-emerald-50 rounded-full w-48 h-48 mx-auto my-auto opacity-50"></div>
-                <p class="text-gray-500">Jumlah Keseluruhan</p>
-                <p class="text-5xl font-bold my-2" x-text="`RM ${totalAmount}`"></p>
-                <p class="text-gray-500"><span x-text="totalPieces"></span> keping</p>
-            </div>
-            <div class="border-t border-gray-100 my-6"></div>
-            <div class="space-y-3">
-                <template x-for="d in denominations" :key="d.value">
-                     <div x-show="d.count > 0" class="flex justify-between text-gray-600">
-                        <span x-text="`RM ${d.value}`"></span>
-                        <span class="font-medium" x-text="`x ${d.count}`"></span>
-                    </div>
-                </template>
-            </div>
-             <div class="border-t border-gray-100 my-6"></div>
-            <div class="flex flex-col sm:flex-row gap-4">
-                <button @click="copySummary()" class="btn-secondary w-full">Salin Ringkasan</button>
-                <button class="btn-secondary w-full opacity-50 cursor-not-allowed" disabled>Muat Turun PDF</button>
-            </div>
-            <p x-show="copied" class="text-center text-sm text-emerald-700 mt-4" x-transition>Ringkasan disalin!</p>
-        </div>
-    </main>
+  <div class="border-t my-8"></div>
 
-    <script>
-        function calculator() {
-            return {
-                budget: null,
-                denominations: [
-                    { value: 100, count: null },
-                    { value: 50, count: null },
-                    { value: 10, count: null },
-                    { value: 5, count: null },
-                    { value: 1, count: null }
-                ],
-                totalAmount: 0,
-                totalPieces: 0,
-                copied: false,
+  <!-- Summary -->
+  <h2 class="text-lg font-semibold mb-4">Ringkasan Duit Raya</h2>
 
-                calculate() {
-                    this.totalAmount = this.denominations.reduce((acc, d) => acc + (d.value * (d.count || 0)), 0);
-                    this.totalPieces = this.denominations.reduce((acc, d) => acc + (parseInt(d.count) || 0), 0);
-                },
-                
-                copySummary() {
-                    const summaryText = `Ringkasan Duit Raya:\nJumlah: RM ${this.totalAmount}\nJumlah Keping: ${this.totalPieces}\n\nPecahan:\n` +
-                        this.denominations
-                            .filter(d => d.count > 0)
-                            .map(d => `RM ${d.value} x ${d.count}`)
-                            .join('\n');
-                    
-                    navigator.clipboard.writeText(summaryText).then(() => {
-                        this.copied = true;
-                        setTimeout(() => this.copied = false, 2000);
-                    });
-                }
-            }
-        }
-    </script>
+  <div class="soft-glow rounded-xl py-6 text-center">
+    <p class="text-gray-500">Jumlah</p>
+    <p class="text-4xl font-bold my-2">RM <span x-text="totalAmount"></span></p>
+    <p class="text-gray-500">Jumlah Keping: <span x-text="totalPieces"></span></p>
 
-    <!-- 
-    // Mode B switch will be enhanced later
-    <div x-show="mode === 'B'" x-data="{
-        budget: 0,
-        ...
-    }">
-    </div> 
-    -->
+    <p class="mt-2 text-sm"
+       :class="{
+         'text-emerald-600': totalAmount <= budget,
+         'text-red-600': totalAmount > budget
+       }">
+      <span x-show="totalAmount <= budget">Baki: RM <span x-text="budget-totalAmount"></span></span>
+      <span x-show="totalAmount > budget">Melebihi bajet</span>
+    </p>
+  </div>
+
+  <div class="border-t my-6"></div>
+
+  <div class="space-y-2">
+    <template x-for="d in denominations" :key="d.value">
+      <div class="flex justify-between text-gray-700">
+        <span>RM <span x-text="d.value"></span></span>
+        <span>x <span x-text="d.count"></span></span>
+      </div>
+    </template>
+  </div>
+
+  <div class="border-t my-6"></div>
+
+  <button @click="copySummary()"
+          class="w-full py-3 rounded-xl font-semibold bg-emerald-700 text-white hover:bg-emerald-800">
+    Salin Ringkasan
+  </button>
+
+  <p x-show="copied" x-transition class="text-center text-sm text-emerald-700 mt-3">
+    Ringkasan disalin!
+  </p>
+</div>
+</main>
+
+<script>
+function calculator(){
+  return{
+    budget:0,
+    auto:false,
+    denominations:[
+      {value:100,count:0},
+      {value:50,count:0},
+      {value:10,count:0},
+      {value:5,count:0},
+      {value:1,count:0}
+    ],
+    totalAmount:0,
+    totalPieces:0,
+    copied:false,
+
+    calculate(){
+      this.totalAmount=this.denominations.reduce((s,d)=>s+d.value*d.count,0);
+      this.totalPieces=this.denominations.reduce((s,d)=>s+d.count,0);
+    },
+
+    updateCount(d,delta){
+      d.count=Math.max(0,d.count+delta);
+      this.calculate();
+    },
+
+    toggleAuto(){
+      this.auto=!this.auto;
+      if(this.auto) this.autoDistribute();
+    },
+
+    shuffle(arr){
+      return arr.sort(()=>Math.random()-0.5);
+    },
+
+    autoDistribute(){
+      this.denominations.forEach(d=>d.count=0);
+      let remaining=this.budget;
+
+      while(remaining>0){
+        const possible=this.denominations.filter(d=>d.value<=remaining);
+        if(!possible.length) break;
+
+        const pick=this.shuffle([...possible])[0];
+        pick.count++;
+        remaining-=pick.value;
+      }
+      this.calculate();
+    },
+
+    copySummary(){
+      const text=`Ringkasan Duit Raya:
+Jumlah: RM ${this.totalAmount}
+Jumlah Keping: ${this.totalPieces}
+
+Pecahan:
+${this.denominations.map(d=>`RM ${d.value} x ${d.count}`).join('\n')}`;
+      navigator.clipboard.writeText(text).then(()=>{
+        this.copied=true;
+        setTimeout(()=>this.copied=false,2000);
+      });
+    }
+  }
+}
+</script>
 </body>
 </html>
